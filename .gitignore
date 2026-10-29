@@ -219,4 +219,6 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
-keys.txt
+security_*
+computer_*
+security.env
