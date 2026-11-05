@@ -222,3 +222,5 @@ __marimo__/
 security_*
 computer_*
 security.env
+
+.venv-1/
