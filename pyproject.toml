@@ -1,0 +1,12 @@
+
+[project]
+name = "computer-vision-robotics"
+version = "0.1.0"
+description = "My Python project"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "opencv-contrib-python>=5.0.0.93",
+    "opencv-python>=5.0.0.93",
+]
