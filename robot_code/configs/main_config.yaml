@@ -1,0 +1,73 @@
+# =====================================
+#     META-INFO
+# =====================================
+configs:
+  node_config: 
+    abbr: nc    # will be used to identify the config in the configs-dictionary
+    path: configs/node_config.yaml
+  topic_config: 
+    abbr: tc    # will be used to identify the config in the configs-dictionary
+    path: configs/topic_config.yaml
+
+# =====================================
+#     MANDATORY PARAMETERS
+# =====================================
+dt: 0.1   # time (in seconds) that one iteration of the run loop should take.
+dt_buffer: 0.2 # DT warnings are given if an iteration of the run loop takes longer than dt * dt_buffer.
+
+stop_key: 'x' # default: 'x'
+# this is defined here, since it's used in main.py and the Menu, so I didn't want to have two places where it needs to be updated
+
+queue_threshold: 2 # approx. size the command queue can reach before the run-loop sends a warning.
+max_queue_msgs: 1 # how many commands from the command queue a node executes per run loop iteration
+
+log: # THE LOG IS NOT YET FULLY IMPLEMENTED! Setting logging to true will have no effect
+  logging: false
+
+print_lock: null # needed to avoid BlockingIOExceptions when printing from multiple processes.
+
+
+# =====================================
+#     IMPLEMENTATION-SPECIFIC DATA
+# =====================================
+robot:
+  width: 0.2 # distance between centres of the robot's wheels in m  
+  wheel_radius: 0.027216 # radius of the large wheels in meters
+  motor_std: 4 # tuneable parameter for EKF SLAM (High means less trust in the motor measurements (bigger ellipses), low means more trust in the motor measurements)
+  dist_std: 0.1 # tuneable parameter for EKF SLAM (High means less trust in the distance measurements (bigger ellipses), low means more trust in the distance measurements)
+  angle_std: 4 # tuneable parameter for EKF SLAM (High means trust bearing measurements less, low means trust bearing measurements more)
+  
+
+camera:
+  # all offsets in m, angles in degrees
+  x_offset:       # where is the camera in relation to the robot's centre
+  y_offset:       # where is the camera in relation to the robot's centre
+  z_offset:       # where is the camera in relation to the robot's centre
+  y_angle:         # 0 would mean that the robot is looking straight up, 90° means that the camera is pointing forward parallel to the floor.
+  
+  marker_size: 0.5 # in m, usually 0.5
+  
+  im_height: 480
+  im_width: 864
+
+  device: "/dev/video0"
+  gain: 10
+  exposure_time: 60
+  fps: 30
+  
+  # The values below shouldn't be changed too much
+  camera_intrinsics:
+    camera_matrix:
+      rows: 3
+      cols: 3
+      dt:   d
+      data: [ 635.93, 0.0,     444.27,
+              0.0,    634.263, 256.835,
+              0.0,    0.0,     1.0      ] # will be reshaped by config utils
+
+    distortion_coefficients:
+      rows: 5
+      cols: 1
+      dt:   d
+      data: [ -0.372403, 0.157163,
+              -0.00424357, -0.00231644, -0.0522724 ] # will be reshaped by config utils
