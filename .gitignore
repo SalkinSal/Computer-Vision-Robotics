@@ -99,8 +99,8 @@ ipython_config.py
 #   Similar to Pipfile.lock, it is generally recommended to include uv.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
 #   commonly ignored for libraries.
-# uv.lock
-
+uv.lock
+venv/
 # poetry
 #   Similar to Pipfile.lock, it is generally recommended to include poetry.lock in version control.
 #   This is especially recommended for binary packages to ensure reproducibility, and is more
@@ -219,8 +219,15 @@ __marimo__/
 # Streamlit
 .streamlit/secrets.toml
 
+# Andrii Dateien
 security_*
 computer_*
 security.env
+
+
+introduction-to-computer-vision-and-robotics-course-material-main.zip
+introduction-to-computer-vision-and-robotics-course-material-main/*
+uv.lock
+
 
 .venv-1/

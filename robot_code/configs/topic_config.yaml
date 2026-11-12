@@ -1,0 +1,98 @@
+# This config contains:
+# - The values used for different buffer lengths.
+# - Meta info for each topic, in particular their message format.
+
+# ------------------
+# TEMPLATE
+# ------------------
+# topic_name:
+#   buffer_length: min/short/medium/long # defined below
+#   dtypes:
+#     names: ["timestamp", "additional field names (str)"] # names of message fields (np columns); first is always "timestamp"
+#     formats: ["int", "additional data types (str or list)"] # cf. list below & Note on n-dim arrays; first is always "int"
+# ------------------
+# The following elements are added to each config during parsing and are listed here for reference:
+# 
+#   publisher: "node_name" # node that publishes to the topic (set in node config), null/None if there is no publisher
+#   subscribers: [] # list of nodes subscribed to the toipc (set in node config, left empty if there are no subscribers)
+#   lock: Lock # multiprocessing.Lock used to prevent read/write conflicts on the buffer
+#
+# ------------------
+
+
+# ------------------
+# DATA TYPES (numpy)
+# ------------------
+# 'i' = 'i4' = 'int32' = np.int32
+# 'l' = 'i8' = 'int' = np.int64
+# 'f' = 'f4' = 'float32' = np.f,loat32
+# 'd' = 'f8' = 'float' = np.float64
+# 'S' = String
+# 'U' = Unicode string, 'U32': Unicode string, max length 32 chars, 'U50': 50 chars, etc.
+# '?' = 'bool' = np.bool
+# ------------------
+
+# ------------------------
+# MULTI-DIMENSIONAL ARRAYS
+# ------------------------
+# Message fields can be multi-dimensional numpy arrays.
+# All elements inside the array have to be of the same datatype.
+# The syntax for an nd-array msg field is:
+#   [dtype [dim1, dim2, dim3, ...]], 
+#   e.g. ["int" [480, 864, 3]] for a 480x864 px RGB image
+# numpy needs tuples for the dtypes, but since yaml cannot accommodate tuple conversion,
+# we use a list instead. It will be converted by the config_parser.
+# ------------------------
+
+---
+buffer_length:
+  long:   200
+  medium: 100
+  short:  50
+  min: 10
+
+topics:
+  # CAMERA
+  camera_capture: # needed for the viewer!
+    buffer_length: short # covers 2-3 seconds
+    dtypes:
+      names: ["timestamp", "img", "cam_fps"]
+      formats: ["int", ["uint8", ["im_height", "im_width", 3]], "int"]
+            # im_height and im_width are set in main config
+      
+  # EV3
+  wheel_positions:
+    buffer_length: short
+    dtypes:
+      names: ["timestamp", "l", "r"]
+      formats: ["int", "int", "int"]
+      
+  motor_movements:
+    buffer_length: short
+    dtypes:
+      names: ["timestamp", "l", "r"]
+      formats: ["int", "float64", "float64"]
+      
+  # VISION
+  marker_detections: # needed for the viewer!
+    buffer_length: short
+    dtypes:
+      names: ["timestamp", "img_timestamp", "count", "ids", "landmark_rs", "landmark_alphas", "landmark_positions", "draw_img"]
+      formats: ["int", "int", "int", ["int", [50]], ["float64", [50]], ["float64", [50]], ["float64", [50, 2]], ["uint8", ["im_height", "im_width", 3]]]
+            # im_height and im_width are set in main config
+            # this assumes that the camera will never see more than 50 markers at one time
+
+  # SLAM
+  robot_pose: # needed for the viewer!
+    buffer_length: min
+    dtypes:
+      names: ["timestamp", "x", "y", "theta", "error"] # error: three values for calculating error ellipse
+      formats: ["int", "float64", "float64", "float64", ["float64", [3]]]
+      
+  landmark_poses: # needed for the viewer!
+    buffer_length: min
+    dtypes:
+      names: ["timestamp", "count", "ids", "positions", "errors"]
+      # count: how many landmarks are known; ids: ids of known landmarks, poisitions: (x, y), errors: 3 values for calculating error ellipse
+      formats: ["int", "int", ["int", [550]], ["float64", [550, 2]], ["float64", [550, 3]]]
+      

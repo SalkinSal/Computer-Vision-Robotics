@@ -1,0 +1,74 @@
+# This config contains: 
+# - A list containing the names of all nodes to be included in the robot framework.
+# - Meta info specific to each node (especially their connection to each other and to various topics).
+
+# ------------------
+# TEMPLATE
+# ------------------
+# node_name:
+#   class_name: name # name of the class (CameraNode, MainNode, etc.)
+#   queues: [] # names of nodes into whose queues this node can publish commands. NOTE: all nodes automatically get the MainNode's queue.
+#   topics:
+#     pubs: [] # names of topics or leave empty. NOTE: every topic can have only one publisher!
+#     subs: [] # names of topics or leave empty
+# ------------------
+# The following elements are added to each config during parsing and are listed here for reference:
+#
+#   is_dummy: false # is the node a dummy node? (Handles unknown commands differently)
+#   dummy_queues: [] # names of queues that don't have a target node included in the framework.
+#
+# ------------------
+
+
+---
+include:
+  # SYSTEM NODES (always required)
+  - main # main node always needs to be included!
+  - logger # logging node, will be included if logging is enabled
+
+  # CUSTOM NODES
+  # Add your own nodes below
+  
+
+nodes:
+  # SYSTEM NODES (do not change!)
+  main:
+    class_name: MainNode
+    queues: [] # intentionally left empty!
+    topics:
+      pubs: [] 
+      subs: []
+
+  logger:
+    class_name: LoggerNode
+    queues: [] # intentionally left empty!
+    topics:
+      pubs: [] # intentionally left empty!
+      subs: [] # intentionally left empty!
+
+  # CUSTOM NODES
+  robot_controller:
+    class_name: RobotControllerNode
+    queues: ["ev3"]
+    topics:
+      pubs: []
+      subs: []
+
+  ev3:
+    class_name: EV3Node
+    queues: []
+    topics:
+      pubs: ["wheel_positions", "motor_movements"]
+      subs: []
+
+  camera:
+    class_name: CameraNode
+    queues: []
+    topics:
+      pubs: ["camera_capture"]
+      subs: []
+
+  # Add your own node configs below!
+  
+
+dummy_queues: [] # queues that don't have a node attached. Filled during parsing.
