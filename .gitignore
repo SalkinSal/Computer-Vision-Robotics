@@ -223,7 +223,11 @@ __marimo__/
 security_*
 computer_*
 security.env
-introdu
+
+
 introduction-to-computer-vision-and-robotics-course-material-main.zip
 introduction-to-computer-vision-and-robotics-course-material-main/*
 uv.lock
+
+
+.venv-1/
