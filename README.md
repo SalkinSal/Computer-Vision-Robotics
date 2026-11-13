@@ -1,2 +1,0 @@
-# Introduction to Computer Vision and Robotics - Course Material
-In this repository, you will find the basic code, jupyter notebooks, and othe programming related materials for the practical part of the **Introduction to Computer Vision and Robotic**.
