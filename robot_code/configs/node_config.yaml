@@ -28,7 +28,9 @@ include:
 
   # CUSTOM NODES
   # Add your own nodes below
-  
+  - controller
+  - actuator 
+
 
 nodes:
   # SYSTEM NODES (do not change!)
@@ -68,7 +70,29 @@ nodes:
       pubs: ["camera_capture"]
       subs: []
 
+  controller:
+    class_name: Controller
+    queues: ["actuator"]
+    topics:
+      pubs: []
+      subs: ["print_log","number_log"]
+    
+  actuator:
+    class_name: Actuator
+    queues: []
+    topics:
+      pubs: ["print_log"]
+      subs: []
+
+  vision:
+    class_name: VisionNode
+    queues: ["camera"]
+    topics:
+      pubs: ["marker_detections"]
+      subs: ["camera_capture","robot_pose"]
+
+
+
   # Add your own node configs below!
   
-
 dummy_queues: [] # queues that don't have a node attached. Filled during parsing.

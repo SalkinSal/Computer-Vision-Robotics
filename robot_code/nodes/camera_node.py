@@ -253,3 +253,5 @@ class CameraNode(Node):
             auto_result = cv2.convertScaleAbs(img, alpha=self.auto_brightness_alpha, beta=self.auto_brightness_beta)
             return auto_result
         return img
+
+    

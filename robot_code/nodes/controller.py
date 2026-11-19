@@ -36,11 +36,37 @@ class Controller(Node):
         This function is called once per run-loop interval.
         Any logic the node should execute once durcing every loop iteration goes here.
         """
-        pass
+        self.print_topic()
+        self.print_numbers()
 
+        pass
+    def send_print_message(self, recipient, msg):
+        self.send_to_queues(
+            recipients="actuator",
+            msg=("print_message", "Hello World")) # ("function name", args))
+
+    def send_numbers(self,recipient,msg: list):
+        self.send_to_queues(recipients="actuator",msg=("product_list", (msg,)))
+
+    def print_topic(self):
+        msgs = self.read_topic(topic_name="print_log", max_msgs=0, new_only=True)
+        if msgs is None:
+            return
+        for msg in msgs:
+            timestamp, mode, print_string, product = msg
+            print(f"[LOG] {mode} | text: {print_string} | product: {product}")
+
+    def print_numbers(self):
+        msgs = self.read_topic(topic_name="number_log", max_msgs=0, new_only=True)
+        if msgs is None:
+            return
+        for msg in msgs:
+            timestamp, count, numbers, product = msg
+            print(f"[NUMBERS] {numbers[:count]} -> product: {product}")
+                
     # =====================================
     #     NODE FUNCTIONS
     # =====================================
-    # Add any methods you want the node to be able to perform here.
+    # Add any methods you want the node to be axble to perform here.
     # Check the documentation to see which methods 
     # are already implemented in the base Node class.

@@ -96,3 +96,14 @@ topics:
       # count: how many landmarks are known; ids: ids of known landmarks, poisitions: (x, y), errors: 3 values for calculating error ellipse
       formats: ["int", "int", ["int", [550]], ["float64", [550, 2]], ["float64", [550, 3]]]
       
+  print_log:
+    buffer_length: min
+    dtypes:
+      names: ["timestamp","mode", "print_string", "product"]
+      formats: ["int","U6","U40","float32"]
+
+  number_log:
+    buffer_length: min
+    dtypes:
+      names: ["timestamp", "count", "numbers", "product"]
+      formats: ["int", "int", ["float32", [10]], "float32"]

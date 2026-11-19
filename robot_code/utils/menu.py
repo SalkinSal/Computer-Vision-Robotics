@@ -42,6 +42,8 @@ from utils.config_utils import Struct
 class Mode(Enum):
     IDLE = 0
     MANUAL = 1
+    PRINT = 2
+    MATH = 3
     # add your own modes here
 
 class Menu:
@@ -66,9 +68,10 @@ class Menu:
         # These must not be used in mode dictionaries!
         self.reserved = {
             stop_key: ("main", "stop_all", None), # Default: 'x', can be changed in main_config
-            "q": ("main", "switch_mode", (0,)), # switch to idle mode
-            "m": ("main", "switch_mode", (1,)), # switch to manual mode
-
+            "v": ("main", "switch_mode", (0,)), # switch to idle mode
+            "w": ("main", "switch_mode", (1,)), # switch to manual mode
+            "y": ("main", "switch_mode", (2,)), # switch to print mode
+            "z": ("main", "switch_mode", (3,)), # switch to Math mode
         }
 
         # ================================
@@ -78,16 +81,22 @@ class Menu:
         # Add your own methods and/or dictionaries below.
 
         self.idle = {
-            
         }
-
         self.manual = {
-            'w': ("robot_controller", "set_move", ('w',)),
-            'a': ("robot_controller", "set_move", ('a',)),
-            's': ("robot_controller", "set_move", ('s',)),
-            'd': ("robot_controller", "set_move", ('d',)),
-            'c': ("robot_controller", "stop", None),
+            'i': ("robot_controller", "set_move", ('w',)),
+            'j': ("robot_controller", "set_move", ('a',)),
+            'k': ("robot_controller", "set_move", ('s',)),
+            'l': ("robot_controller", "set_move", ('d',)),
+            'e': ("robot_controller", "stop", None),
         }
+        self.print = {
+            "a":("controller","send_print_message", ("actuator","LOL")), 
+            "b":("controller","print_topic",None)            
+        }
+        self.math = {
+            "a":("controller","send_numbers", ("actuator",[1,2,3])),
+            "b":("controller","print_topic",None)    
+        }   
 
         # ================================
 

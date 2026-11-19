@@ -231,5 +231,7 @@ def main_test():
 if __name__ == '__main__':
     # uncomment to run main_test method instead of normal framework 
     # main_test()
-
+    import multiprocessing
+    multiprocessing.set_start_method("fork", force=True)
     Main().run()
+    
