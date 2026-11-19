@@ -1,4 +1,4 @@
-# This config contains: 
+# This config contains:
 # - A list containing the names of all nodes to be included in the robot framework.
 # - Meta info specific to each node (especially their connection to each other and to various topics).
 
@@ -28,7 +28,11 @@ include:
 
   # CUSTOM NODES
   # Add your own nodes below
-  
+
+  - listener
+  - sender
+  - input
+
 
 nodes:
   # SYSTEM NODES (do not change!)
@@ -36,7 +40,7 @@ nodes:
     class_name: MainNode
     queues: [] # intentionally left empty!
     topics:
-      pubs: [] 
+      pubs: []
       subs: []
 
   logger:
@@ -69,6 +73,27 @@ nodes:
       subs: []
 
   # Add your own node configs below!
-  
+  #
+  sender:
+    class_name: SenderNode
+    queues: ["listener"] # intentionally left empty!
+    topics:
+      pubs: []
+      subs: []
+
+  listener:
+    class_name: ListenerNode
+    queues: [] # intentionally left empty!
+    topics:
+      pubs: []
+      subs: []
+
+  input:
+    class_name: InputNode
+    queues: [] # intentionally left empty!
+    topics:
+      pubs: []
+      subs: []
+
 
 dummy_queues: [] # queues that don't have a node attached. Filled during parsing.

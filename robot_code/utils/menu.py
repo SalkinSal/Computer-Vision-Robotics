@@ -1,23 +1,23 @@
 """
-The Menu class stores information about commands that can be triggered 
+The Menu class stores information about commands that can be triggered
 by key presses. It is instantiated and administered by the main node,
 which receives the key presses from Main.
 
-The Mode enum defines the different modes available to the system 
+The Mode enum defines the different modes available to the system
 and sets their integer values.
 
 For each mode, there is a dictionary of key presses and the commands
 those key presses trigger.
 
 
-Some keys are reserved, meaning they cannot be used in any 
-of the mode-specific key press dictionaries. 
+Some keys are reserved, meaning they cannot be used in any
+of the mode-specific key press dictionaries.
 These keys are mostly used for switching modes or other meta-functions.
 NOTE: The stop key (default: 'x') is defined in the main config, since it is needed
     in other places as well!
 During init, the Menu ensures that no mode dicts use any keys from the reserved dict.
 
-Key Dict Format: 
+Key Dict Format:
 {
     "key": ("recipient", "method_name", args)
 }
@@ -34,6 +34,7 @@ Key Dict Format:
 """
 
 from enum import Enum
+import string
 import traceback
 
 from utils.print_utils import print_locked as print
@@ -42,6 +43,8 @@ from utils.config_utils import Struct
 class Mode(Enum):
     IDLE = 0
     MANUAL = 1
+    PRINT = 2
+    MATH = 3
     # add your own modes here
 
 class Menu:
@@ -53,7 +56,7 @@ class Menu:
         Parameters
         ----------
         main_config:    Struct
-            The framework's main config, needed to determine stop key. 
+            The framework's main config, needed to determine stop key.
         """
         self.mode = Mode.IDLE
         self.last_mode = None
@@ -68,6 +71,8 @@ class Menu:
             stop_key: ("main", "stop_all", None), # Default: 'x', can be changed in main_config
             "q": ("main", "switch_mode", (0,)), # switch to idle mode
             "m": ("main", "switch_mode", (1,)), # switch to manual mode
+            "p": ("main", "switch_mode", (2,)), # switch to manual mode
+            "o": ("main", "switch_mode", (3,)), # switch to manual mode
 
         }
 
@@ -78,7 +83,7 @@ class Menu:
         # Add your own methods and/or dictionaries below.
 
         self.idle = {
-            
+            "h":(['sender'],'send_message',None)
         }
 
         self.manual = {
@@ -87,6 +92,15 @@ class Menu:
             's': ("robot_controller", "set_move", ('s',)),
             'd': ("robot_controller", "set_move", ('d',)),
             'c': ("robot_controller", "stop", None),
+        }
+
+        self.print = {
+            'r': (['input'],'read_file',None),
+            't': (['input'],'print_file',None)
+        }
+
+        self.math = {
+            "h":(['sender'],'send_message',None)
         }
 
         # ================================
@@ -116,24 +130,24 @@ class Menu:
                     print(f"[bold][red]Key [white]'{k}'[/white] is reserved and cannot be used in key-dict [white]'self.{mode.name.lower()}'[/white]!")
                     raise Exception
 
-        
+
 
     # depending on current mode, return the desired command and recipient node
     def parse_keypress(self, key:str) -> tuple:
         """
-        Return a command and recipient node based on 
+        Return a command and recipient node based on
         the current mode and the pressed key.
 
-        If the args specified in the key dict are a single value, 
+        If the args specified in the key dict are a single value,
         this is automatically wrapped in a tuple.
         If the args are a single value in the form of a list or tuple,
-        they need to be wrapped in a tuple (with a comma before the closing paranthesis!). 
+        they need to be wrapped in a tuple (with a comma before the closing paranthesis!).
 
         Parameters
         ----------
         key: str
             The key that was pressed.
-        
+
         Returns
         -------
         3-tuple or None
@@ -143,7 +157,7 @@ class Menu:
         """
         # select keypress dictionary based on current mode
         key_dict = getattr(self, self.mode.name.lower())
-        
+
         if key in key_dict:
             ret = key_dict[key]
         elif key in self.reserved:
@@ -167,7 +181,7 @@ class Menu:
 
     # ================================
     #     AUXILIARY METHODS
-    # ================================ 
+    # ================================
     def switch_mode(self, new_mode:int) -> bool:
         """
         Switch the menu to a new mode and preserve information about the previous mode.
