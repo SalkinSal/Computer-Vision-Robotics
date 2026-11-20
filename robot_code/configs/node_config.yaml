@@ -29,9 +29,8 @@ include:
   # CUSTOM NODES
   # Add your own nodes below
 
-  - listener
-  - sender
   - input
+  - camera
 
 
 nodes:
@@ -94,6 +93,13 @@ nodes:
     topics:
       pubs: []
       subs: []
+
+  viewer:
+    class_name: ViewerNode
+    queues: []
+    topics:
+      pubs: []
+      subs: ["camera_capture"]
 
 
 dummy_queues: [] # queues that don't have a node attached. Filled during parsing.
