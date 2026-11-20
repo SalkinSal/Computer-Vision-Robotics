@@ -3,7 +3,7 @@ from flask import Flask, Response
 from nodes.node import Node
 import threading
 
-class ViewerNode(Node):
+class VisionNode(Node):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.latest_frame = None
@@ -28,10 +28,12 @@ class ViewerNode(Node):
 
     def run_step(self):
         msgs = self.read_topic(
-            topic_name="camera_capture",
-            max_msgs=1,
-            new_only=True)
+        topic_name="camera_capture",
+        max_msgs=1,
+        new_only=True)
         if msgs is None:
+            print("VisionNode: kein neues Bild")
             return
         timestamp, frame, cam_fps = msgs[0]
         self.latest_frame = frame
+        print("VisionNode: Bild empfangen, fps =", cam_fps)

@@ -1,4 +1,4 @@
-# This config contains:
+# This config contains: 
 # - A list containing the names of all nodes to be included in the robot framework.
 # - Meta info specific to each node (especially their connection to each other and to various topics).
 
@@ -28,11 +28,11 @@ include:
   - robot_controller
   - ev3
   - camera
-  - vision
+  - VisionNode
   # CUSTOM NODES
-  # Add your own nodes below
+  # Add your own wnodes below
   #- controller
-  #- actuator
+  #- actuator 
 
 
 nodes:
@@ -41,7 +41,7 @@ nodes:
     class_name: MainNode
     queues: [] # intentionally left empty!
     topics:
-      pubs: []
+      pubs: [] 
       subs: ["camera_capture"]
 
   logger:
@@ -79,7 +79,7 @@ nodes:
     topics:
       pubs: []
       subs: ["print_log","number_log"]
-
+    
   actuator:
     class_name: Actuator
     queues: []
@@ -87,7 +87,7 @@ nodes:
       pubs: ["print_log"]
       subs: []
 
-  vision:
+  VisionNode:
     class_name: VisionNode
     queues: ["camera"]
     topics:
@@ -97,5 +97,5 @@ nodes:
 
 
   # Add your own node configs below!
-
+  
 dummy_queues: [] # queues that don't have a node attached. Filled during parsing.
