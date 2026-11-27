@@ -1,4 +1,4 @@
-# This config contains: 
+# This config contains:
 # - A list containing the names of all nodes to be included in the robot framework.
 # - Meta info specific to each node (especially their connection to each other and to various topics).
 
@@ -25,14 +25,12 @@ include:
   # SYSTEM NODES (always required)
   - main # main node always needs to be included!
   - logger # logging node, will be included if logging is enabled
-  - robot_controller
-  - ev3
-  - camera
-  - VisionNode
+
   # CUSTOM NODES
-  # Add your own wnodes below
-  #- controller
-  #- actuator 
+  # Add your own nodes below
+
+  - input
+  - camera
 
 
 nodes:
@@ -41,8 +39,8 @@ nodes:
     class_name: MainNode
     queues: [] # intentionally left empty!
     topics:
-      pubs: [] 
-      subs: ["camera_capture"]
+      pubs: []
+      subs: []
 
   logger:
     class_name: LoggerNode
@@ -73,29 +71,35 @@ nodes:
       pubs: ["camera_capture"]
       subs: []
 
-  controller:
-    class_name: Controller
-    queues: ["actuator"]
+  # Add your own node configs below!
+  #
+  sender:
+    class_name: SenderNode
+    queues: ["listener"] # intentionally left empty!
     topics:
       pubs: []
-      subs: ["print_log","number_log"]
-    
-  actuator:
-    class_name: Actuator
-    queues: []
-    topics:
-      pubs: ["print_log"]
       subs: []
 
-  VisionNode:
-    class_name: VisionNode
-    queues: ["camera"]
+  listener:
+    class_name: ListenerNode
+    queues: [] # intentionally left empty!
     topics:
-      pubs: ["marker_detections"]
-      subs: ["camera_capture","robot_pose"]
+      pubs: []
+      subs: []
+
+  input:
+    class_name: InputNode
+    queues: [] # intentionally left empty!
+    topics:
+      pubs: []
+      subs: []
+
+  viewer:
+    class_name: ViewerNode
+    queues: []
+    topics:
+      pubs: []
+      subs: ["camera_capture"]
 
 
-
-  # Add your own node configs below!
-  
 dummy_queues: [] # queues that don't have a node attached. Filled during parsing.
