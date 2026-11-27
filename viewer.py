@@ -95,7 +95,7 @@ class GuiPart:
 
         self.load_new_data()
 
-    
+
     def compute_window_spacing(self):
         root_w = self.root.winfo_width()
         root_h = self.root.winfo_height()
@@ -107,7 +107,7 @@ class GuiPart:
 
         self.width_padding = root_w - frame_width
         self.height_padding = root_h - frame_height
-        
+
 
     def resize_event(self, event):
         if(event.widget == self.root and (self.width != event.width or self.height != event.height)
@@ -119,7 +119,7 @@ class GuiPart:
             self.root.update_idletasks()
 
 
-    
+
     def resize(self):
 
         frame_width = self.width - self.width_padding
@@ -127,7 +127,7 @@ class GuiPart:
 
         # frame_width = self.world_canvas.winfo_width() + self.sensor_canvas.winfo_width()
         # frame_height = self.world_canvas.winfo_height() + self.camera_canvas.winfo_height()
-        
+
         # print("frame_width", frame_width)
         # print("max_window_width", max_window_width)
 
@@ -137,7 +137,7 @@ class GuiPart:
         # now we calculate new canvas sizes
         max_canvas_width = int((frame_width)/2)
         max_canvas_height = int((frame_height)/2)
-        
+
         self.world_canvas_extents = (max_canvas_width, max_canvas_height)
         self.sensor_canvas_extents = (max_canvas_width, max_canvas_height)
 
@@ -233,7 +233,7 @@ class GuiPart:
         # draw axes
         draw_objects.append(ScannerData(self.sensor_canvas,
             self.sensor_canvas_extents, self.scanner_range))
-        
+
         draw_objects.append(WorldGrid(self.world_canvas, self.world_canvas_extents, self.world_extents))
 
         if msg is not None:
@@ -273,7 +273,7 @@ class GuiPart:
             if robot_position is not None:
                 # black points
                 # draw_objects.append(Points(robot_world_points, self.world_canvas, "#262339"))
-                
+
                 # position with direction, use robot_pose instead of robot_position
                 # red points with ellipse
                 draw_objects.append(Trajectory(np.expand_dims(robot_pose, axis=0),
@@ -345,12 +345,12 @@ class GuiPart:
                 self.camera_img_size = img.shape[:2]
                 cv2image = cv2.resize(cv2image, self.camera_canvas_extents, interpolation = cv2.INTER_NEAREST) # INTER_NEAREST is fastest
                 img = Image.fromarray(cv2image)
-                
+
                 # Convert image to PhotoImage
                 self.imgtk = ImageTk.PhotoImage(image = img)
                 # self.camera_canvas.delete("IMG")
                 self.camera_canvas.create_image(0, 0, image=self.imgtk, anchor=tkinter.NW, tags="IMG")
-                
+
                 text = ""
                 text += "delay: " + str(delay_milliseconds) + "ms" + "\n"
                 text += date_time_str + "\n"
@@ -394,11 +394,11 @@ class ThreadedClient:
 
         # Set up the GUI part
         self.gui = GuiPart(root, self.queue, self.endApplication)
-        
+
         if local:
-            self.subscriber = Subscriber(port='tcp://localhost:5555') 
+            self.subscriber = Subscriber(port='tcp://localhost:5555')
         else:
-            self.subscriber = Subscriber(port='tcp://100.64.0.1:5555')
+            self.subscriber = Subscriber(port='tcp://100.64.0.3:5555')
 
         # Set up the thread to do asynchronous I/O
         # More threads can also be created and used, if necessary
@@ -448,7 +448,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     client = None
     root = tkinter.Tk()
-    
+
     # root.tk.call('tk', 'scaling', 2.0) # doesn't do anything
 
     client = ThreadedClient(root, args.local)
